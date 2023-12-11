@@ -1,1 +1,4 @@
-streamlit ; geopandas ; streamlit-folium ; leafmap
+streamlit
+geopandas
+streamlit-folium
+leafmap
