@@ -1,5 +1,5 @@
 # CO2-nouveaux-quartiers
-This is a streamlit web app to compute spatial average of built-environment variables that have a causal effect on CO2 mobility-emissions.
+This is a [streamlit web app](https://co2-nouveaux-quartiers-geneve.streamlit.app/) to compute spatial average of built-environment variables that have a causal effect on CO2 mobility-emissions.
 It is part of the project "Elaboration d’un outil d’évaluation de l’impact carbone de la mobilité dans les nouveaux quartiers à Genève" for the Canton of Geneva that aims to evaluate carbon emissions in function of a user's choices in terms of the location and building specifics of a new quartier. 
 
 
@@ -9,7 +9,6 @@ Literature suggests that mobility-emissions are not only closely linked to socio
 * Diversity (diversity in terms of services, land use, jobs-to-population ratios, ...)
 * Distance to transit (quality of public transport service)
 * Destination accessibility (ease of access to population and jobs by public transport or car)
-
 ![image](https://github.com/Fien6-t/CO2-nouveaux-quartiers/assets/152168560/3058401e-a797-4f00-a6df-41fffc8a14f4)
 
 
@@ -17,6 +16,7 @@ Using the data of the swiss ["Microrecensement mobilité et transports" (MRMT) 2
 
 ![image](https://github.com/Fien6-t/CO2-nouveaux-quartiers/assets/152168560/0e332276-6596-46ba-9c27-99fa77073714)
 
+More information about how the built-environment variables were obtained can be found in the "About" section on the web app (click on the 3 dots on the upper right of the screen and then click on "About").
 
 Extracting the built-environment variables for a given quartier is, however, not easy. It is for this reason that we have developed this app.
 The app lets a user draw the limits of their quartier and computes, based on that drawing, a spatial average of the intersected, geospatial built-environment variables. For more flexibility, we added the option of replacing specific geospatial variables by user defined geospatial data that they can upload in a seperate tab.
