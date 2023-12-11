@@ -1,1 +1,1 @@
-streamlit == 1.27.0 ; geopandas ; streamlit-folium ; leafmap
+streamlit ; geopandas ; streamlit-folium ; leafmap
