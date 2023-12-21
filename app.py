@@ -189,10 +189,9 @@ def _remove_uploaded_layer(k):
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # 1.5. Convert aggregated results dataframe to excel file   
-@st.cache
 def convert_df(df):
     if st.session_state.aggregated_values:
-        return df.to_excel()    
+        return df.to_csv().encode('utf-8')
     
 #------------------------------------------------------------------------------
 # 2. Page configuration
@@ -378,11 +377,11 @@ if output:
                                         df.columns[1]:'Valeurs'})
                 df = df.replace(dict_colnames)
                 st.data_editor(df)
-            excel = convert_df(df)
+            csv = convert_df(df)
             f_name = datetime.datetime.now().strftime('%d%m%Y_%H%M%S')
             st.download_button(label = "Télécharger données agrégées", 
-                               data = excel,
-                               file_name = 'DonneesAgregees_'+f_name+'.xlsx')
+                               data = csv,
+                               file_name = 'DonneesAgregees_'+f_name+'.csv')
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                   
 
 
