@@ -19,6 +19,8 @@ import geopandas as gpd
 
 from shapely.geometry import Polygon
 
+import datetime
+
 import warnings
 warnings.filterwarnings("ignore", "is_categorical_dtype")
 
@@ -185,7 +187,12 @@ def _remove_uploaded_layer(k):
     st.session_state[f'{k}_df'] = None
     st.session_state[f'{k}_colnames'] = ['','']
 
-    
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# 1.5. Convert aggregated results dataframe to excel file   
+@st.cache
+def convert_df(df):
+    if st.session_state.aggregated_values:
+        return df.to_excel()    
     
 #------------------------------------------------------------------------------
 # 2. Page configuration
@@ -257,7 +264,7 @@ with tab1:
     m = _show_map(center=MAP_CENTER, zoom=MAP_ZOOM)
 
 with tab2:
-    st.write("Afin d'ajouter vos propres données, cliquez sur la variable pour laquelle vous voulez remplacer les géodonnées. Pour enlever les données que vous avez ajoutées, cliquez sur la croix rouge en dessous du bouton 'Browse files'.")
+    st.write("Afin d'ajouter vos propres données, cliquez sur la variable pour laquelle vous voulez remplacer les géodonnées. Pour enlever les données que vous avez ajoutées, cliquez sur la croix rouge (qui apparaîtra une fois que vous avez chargé des données) en dessous du bouton 'Browse files'.")
     for k in list(dict_colnames.keys()):
         if f'{k}_uploaded' not in st.session_state:
             st.session_state[f'{k}_uploaded'] = False
@@ -371,6 +378,11 @@ if output:
                                         df.columns[1]:'Valeurs'})
                 df = df.replace(dict_colnames)
                 st.data_editor(df)
+            excel = convert_df(df)
+            f_name = datetime.datetime.now().strftime('%d%m%Y_%H%M%S')
+            st.download_button(label = "Télécharger données agrégées", 
+                               data = excel,
+                               file_name = 'DonneesAgregees_'+f_name+'.xlsx')
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                   
 
 
