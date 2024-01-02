@@ -21,6 +21,8 @@ from shapely.geometry import Polygon
 
 import datetime
 
+from io import BytesIO
+
 import warnings
 warnings.filterwarnings("ignore", "is_categorical_dtype")
 
@@ -191,7 +193,12 @@ def _remove_uploaded_layer(k):
 # 1.5. Convert aggregated results dataframe to excel file   
 def convert_df(df):
     if st.session_state.aggregated_values:
-        return df.to_csv().encode('utf-8')
+        output = BytesIO()
+        writer = pd.ExcelWriter(output, engine='openpyxl')
+        df.to_excel(writer, index=False, sheet_name='Sheet1') 
+        writer.close()
+        processed_data = output.getvalue()
+        return processed_data
     
 #------------------------------------------------------------------------------
 # 2. Page configuration
@@ -216,6 +223,7 @@ Voici une liste de la source des données:
 * Accessibilité gravitaire: [en TIM](https://map.geo.admin.ch/?lang=fr&topic=ech&bgLayer=ch.swisstopo.pixelkarte-farbe&layers=ch.swisstopo.zeitreihen,ch.bfs.gebaeude_wohnungs_register,ch.bav.haltestellen-oev,ch.swisstopo.swisstlm3d-wanderwege,ch.astra.wanderland-sperrungen_umleitungen,ch.are.gueteklassen_oev,ch.bfs.volkszaehlung-bevoelkerungsstatistik_einwohner,ch.bfs.betriebszaehlungen-beschaeftigte_vollzeitaequivalente,ch.swisstopo.vec200-landcover,ch.are.erreichbarkeit-oev,ch.are.erreichbarkeit-miv&layers_opacity=1,1,1,0.8,0.8,0.75,1,1,0.75,0.75,0.75&layers_visibility=false,false,false,false,false,false,false,false,false,false,true&layers_timestamp=18641231,,,,,,2021,2020,,,&E=2496976.13&N=1113393.32&zoom=7.699477143558599) et [en TP](https://map.geo.admin.ch/?lang=fr&topic=ech&bgLayer=ch.swisstopo.pixelkarte-farbe&layers=ch.swisstopo.zeitreihen,ch.bfs.gebaeude_wohnungs_register,ch.bav.haltestellen-oev,ch.swisstopo.swisstlm3d-wanderwege,ch.astra.wanderland-sperrungen_umleitungen,ch.are.gueteklassen_oev,ch.bfs.volkszaehlung-bevoelkerungsstatistik_einwohner,ch.bfs.betriebszaehlungen-beschaeftigte_vollzeitaequivalente,ch.swisstopo.vec200-landcover,ch.are.erreichbarkeit-oev&layers_opacity=1,1,1,0.8,0.8,0.75,1,1,0.75,0.75&layers_visibility=false,false,false,false,false,false,false,false,false,true&layers_timestamp=18641231,,,,,,2021,2020,,&E=2496486.58&N=1113929.06&zoom=7.699477143558599)
 * Densité routière: ratio de la longueur des routes sur la surface d'une cellule de 500 x 500 m
 
+Vous trouverez [ici](https://github.com/Fien6-t/CO2-nouveaux-quartiers) le code source de cette application web.
 """
 BTN_LABEL_CALCULATE = "Calculer valeurs agrégées"
 BTN_LABEL_DOWNLOAD = "Télécharger les données "
@@ -381,7 +389,7 @@ if output:
             f_name = datetime.datetime.now().strftime('%d%m%Y_%H%M%S')
             st.download_button(label = "Télécharger données agrégées", 
                                data = csv,
-                               file_name = 'DonneesAgregees_'+f_name+'.csv')
+                               file_name = 'DonneesAgregees_'+f_name+'.xlsx')
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                   
 
 

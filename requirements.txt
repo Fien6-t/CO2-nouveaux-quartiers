@@ -2,3 +2,4 @@ streamlit
 geopandas
 streamlit-folium
 leafmap
+openpyxl
