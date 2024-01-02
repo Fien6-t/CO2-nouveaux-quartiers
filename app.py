@@ -21,6 +21,8 @@ from shapely.geometry import Polygon
 
 import datetime
 
+from io import BytesIO
+
 import warnings
 warnings.filterwarnings("ignore", "is_categorical_dtype")
 
@@ -191,7 +193,12 @@ def _remove_uploaded_layer(k):
 # 1.5. Convert aggregated results dataframe to excel file   
 def convert_df(df):
     if st.session_state.aggregated_values:
-        return df.to_csv().encode('utf-8')
+        output = BytesIO()
+        writer = pd.ExcelWriter(output, engine='openpyxl')
+        df.to_excel(writer, index=False, sheet_name='Sheet1') 
+        writer.close()
+        processed_data = output.getvalue()
+        return processed_data
     
 #------------------------------------------------------------------------------
 # 2. Page configuration
@@ -381,7 +388,7 @@ if output:
             f_name = datetime.datetime.now().strftime('%d%m%Y_%H%M%S')
             st.download_button(label = "Télécharger données agrégées", 
                                data = csv,
-                               file_name = 'DonneesAgregees_'+f_name+'.csv')
+                               file_name = 'DonneesAgregees_'+f_name+'.xlsx')
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                   
 
 
